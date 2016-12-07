@@ -215,7 +215,7 @@ def tf_deep_nn(regular=False, drop_out=False, lrd=False, layer_cnt=2):
             for i in range(len(weights)):
                 l2_loss += tf.nn.l2_loss(weights[i])
                 # l2_loss += tf.nn.l2_loss(biases[i])
-            beta = 0.25 / batch_size
+            # beta = 0.25 / batch_size
             beta = 1e-5
             l2_loss *= beta
         loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits, tf_train_labels)) + l2_loss
@@ -351,7 +351,7 @@ def tf_simple_cnn(batch_size=128, regular=False, drop_out=False, lrd=False, laye
 
     num_steps = 3001
 
-    with tf.Session(graph=graph) as session:
+    with tf.Session(graph=p_graph) as session:
         tf.initialize_all_variables().run()
         print("Initialized")
         for step in range(num_steps):
@@ -364,9 +364,9 @@ def tf_simple_cnn(batch_size=128, regular=False, drop_out=False, lrd=False, laye
             # Prepare a dictionary telling the session where to feed the minibatch.
             # The key of the dictionary is the placeholder node of the graph to be fed,
             # and the value is the numpy array to feed to it.
-            feed_dict = {tf_train_dataset: batch_data, tf_train_labels: batch_labels, lambda_regul: 1e-3}
+            # feed_dict = {tf_train_dataset: batch_data, tf_train_labels: batch_labels, lambda_regul: 1e-3}
             # If using one CNN layer
-            # feed_dict = {tf_train_dataset: batch_data, tf_train_labels: batch_labels, lambda_regul: 1e-3, keep_prob: 0.5}
+            feed_dict = {tf_train_dataset: batch_data, tf_train_labels: batch_labels, lambda_regul: 1e-3, keep_prob: 0.5}
 
             _, l, predictions = session.run(
                 [optimizer, loss, train_prediction], feed_dict=feed_dict)
